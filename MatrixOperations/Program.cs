@@ -46,7 +46,7 @@ namespace MatrixOperations
             PrintMatrix(a);
             Console.WriteLine(a.IsOrthogonal());
             
-
+            
             //Matrix inverse = Matrix.GetInverse(a);
             //if (inverse != null)
             //{
