@@ -103,6 +103,15 @@ namespace MatrixOperations
         {
             return this.RowCount == this.ColumnCount;
         }
+
+        /// <summary>
+        /// Check if a matrix is 2D vector
+        /// </summary>
+        /// <returns></returns>
+        private bool IsVector2D()
+        {
+            return this.ColumnCount == 1 && this.RowCount == 2;
+        }
         
         /// <summary>
         /// Check if a matrix is orthogonal
@@ -238,6 +247,104 @@ namespace MatrixOperations
                 }
             }
             return min;
+        }
+
+        /// <summary>
+        /// Clockwise Rotation by an angle θ about the origin
+        /// </summary>
+        /// <param name="angle"> The angle</param>
+        /// <returns> The transformed matrix</returns>
+        public Matrix ClockwiseRotation(double angle)
+        {
+            if (!this.IsVector2D())
+            {
+                Console.WriteLine("The matrix must be a 2D vector!");
+                return null;
+            }
+            Matrix transform = new Matrix(2, 2);
+            transform[0, 0] = Math.Cos(angle);
+            transform[0, 1] = Math.Sin(angle);
+            transform[1, 0] = Math.Sin(-angle);
+            transform[1, 1] = Math.Cos(angle);
+            return Multiply(transform, this);
+        }
+
+        /// <summary>
+        /// Counter Clockwise Rotation by an angle θ about the origin
+        /// </summary>
+        /// <param name="angle"> The angle</param>
+        /// <returns> The transformed matrix</returns>
+        public Matrix CounterClockwiseRotation(double angle)
+        {
+            if (!this.IsVector2D())
+            {
+                Console.WriteLine("The matrix must be a 2D vector!");
+                return null;
+            }
+            Matrix transform = new Matrix(2, 2);
+            transform[0, 0] = Math.Cos(angle);
+            transform[0, 1] = Math.Sin(-angle);
+            transform[1, 0] = Math.Sin(angle);
+            transform[1, 1] = Math.Cos(angle);
+            return Multiply(transform, this);
+        }
+
+        /// <summary>
+        /// Reflection against the x-axis
+        /// </summary>
+        /// <returns> The transformed matrix</returns>
+        public Matrix X_Reflection()
+        {
+            if (!this.IsVector2D())
+            {
+                Console.WriteLine("The matrix must be a 2D vector!");
+                return null;
+            }
+            Matrix transform = new Matrix(2, 2);
+            transform[0, 0] = 1;
+            transform[0, 1] = 0;
+            transform[1, 0] = -1;
+            transform[1, 1] = 0;
+            return Multiply(transform, this);
+        }
+
+        /// <summary>
+        /// Reflection against the y-axis
+        /// </summary>
+        /// <returns> The transformed matrix</returns>
+        public Matrix Y_Reflection()
+        {
+            if (!this.IsVector2D())
+            {
+                Console.WriteLine("The matrix must be a 2D vector!");
+                return null;
+            }
+            Matrix transform = new Matrix(2, 2);
+            transform[0, 0] = -1;
+            transform[0, 1] = 0;
+            transform[1, 0] = 1;
+            transform[1, 1] = 0;
+            return Multiply(transform, this);
+        }
+
+        /// <summary>
+        /// Scaling (contraction or dilation) in all x and y direction by a factor k
+        /// </summary>
+        /// <param name="k"> The given factor</param>
+        /// <returns> The transformed matrix</returns>
+        public Matrix Scale(int k)
+        {
+            if (!this.IsVector2D())
+            {
+                Console.WriteLine("The matrix must be a 2D vector!");
+                return null;
+            }
+            Matrix transform = new Matrix(2, 2);
+            transform[0, 0] = k;
+            transform[0, 1] = 0;
+            transform[1, 0] = k;
+            transform[1, 1] = 0;
+            return Multiply(transform, this);
         }
 
         /// <summary>
@@ -382,7 +489,7 @@ namespace MatrixOperations
                 matrix[q, j] += (scalar * matrix[p, j]);
             }
         }
-        
+
         public static bool operator == (Matrix a, Matrix b)
         {
             if (!(a.RowCount == b.RowCount && a.ColumnCount == b.ColumnCount))
